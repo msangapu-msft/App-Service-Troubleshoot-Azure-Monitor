@@ -3,6 +3,12 @@
 // increase execution time
 set_time_limit(0);
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+ini_set('log_errors', 1);
+ini_set('error_log', '/home/LogFiles/php_errors.log');
+
 //Retrieve query parameters
 $maxImages = $_GET['images'];
 $imgNames  = explode(",",$_GET['imgNames']);
