@@ -12,8 +12,13 @@ for ($x=0; $x<$maxImages; $x++){
     if ($x >=3) {
                     // Simulate HTTP 500 Internal Server Error
                     http_response_code(500);
-                    echo "Simulated 500 Internal Server Error.";
-                    exit();
+
+	    	    // Write a log entry
+		    error_log("Simulated HTTP 500 Internal Server Error triggered intentionally.");
+
+		    // Exit with message (simulate app error response)
+		    exit("An internal server error occurred.");
+
     }
     $imgArray[$x] = imagecreatefromjpeg("./images/" . $imgNames[$x]);
     
