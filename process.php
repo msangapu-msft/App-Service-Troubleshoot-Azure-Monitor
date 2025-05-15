@@ -14,7 +14,7 @@ $imgNames  = explode(",",$_GET['imgNames']);
 
 //Load JPEGs into an array (in memory)
 for ($x=0; $x<$maxImages; $x++){
-    if ($x >=3) {
+    if ($maxImages >=3) {
                     // Simulate HTTP 500 Internal Server Error
                     http_response_code(500);
 
