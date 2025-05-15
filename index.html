@@ -275,37 +275,67 @@
         });
         
         
-        $("#process").click(function(){
-    
-            var imgsrc='';
-            var numImages = $(".selected").length;
-            
-            $('#message').html("<div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\">Loading...</span></div>");
-            
-            $(".selected").each(function() {  
-              imgsrc = imgsrc + (this.src).split('\/').pop() + ",";
-            }); 
-            
-            $.ajax({
-            
-                url : 'process.php',
-                type : 'GET',
-                data : {
-                    'images' : numImages,
-                    'imgNames':imgsrc
-                },
-                success : function(data) {              
-                    alert(numImages+' image(s) converted. \nClick Tools->View Images to confirm.');
-                    $('#convertModal').modal('hide');
-                },
-                error : function(request,error)
-                {
-                    alert(request.statusText + "- HTTP "+ request.status);
-                    $('#message').html("");
-                }
-            });
+$("#process").click(function() {
 
-        });
+    var imgsrc = '';
+    var numImages = $(".selected").length;
+
+    // Show a loading spinner while processing
+    $('#message').html("<div class=\"spinner-border\" role=\"status\"><span class=\"sr-only\">Loading...</span></div>");
+
+    // Build comma-separated list of selected image names
+    $(".selected").each(function() {
+        imgsrc += (this.src).split('/').pop() + ",";
+    });
+
+    $.ajax({
+        url: 'process.php',
+        type: 'GET',
+        data: {
+            'images': numImages,
+            'imgNames': imgsrc
+        },
+        success: function(data) {
+            // On success, inform user and hide modal
+            alert(numImages + ' image(s) converted. \nClick Tools->View Images to confirm.');
+            $('#convertModal').modal('hide');
+            $('#message').html(""); // Clear spinner/message
+        },
+        error: function(request, error) {
+            console.error("AJAX Error:", request);
+
+            var message = "An unexpected error occurred.";
+            var status = request.status;
+
+            // Attempt to parse JSON error response from process.php
+            try {
+                var responseJSON = JSON.parse(request.responseText);
+                if (responseJSON && responseJSON.message) {
+                    message = responseJSON.message;
+                }
+            } catch (e) {
+                console.warn("Failed to parse JSON error response");
+            }
+
+            // Customize message based on HTTP status code
+            if (status === 404) {
+                message = "The requested resource was not found (404).";
+            } else if (status === 500) {
+                message = message || "A server error occurred. Please try again later (500).";
+            } else if (status === 0) {
+                message = "Network error or CORS issue.";
+            }
+
+            // Display user-friendly error message
+            alert("Error: " + message + " (HTTP " + status + ")");
+
+            // Clear spinner/message
+            $('#message').html("");
+        }
+    });
+
+});
+
 
 
         $("#delete").click(function(){
