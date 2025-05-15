@@ -1,12 +1,20 @@
 <?php
 
-// increase execution time
+// Allow the script to run indefinitely without timing out (useful for long-running tasks)
 set_time_limit(0);
 
+// Limit the maximum memory usage of this PHP script to 32 megabytes (for controlled resource usage/testing)
 ini_set('memory_limit', '32M');
+
+// Enable reporting of all PHP errors, warnings, and notices (useful for debugging)
 error_reporting(E_ALL);
+
+// Enable logging of PHP errors to a log file instead of displaying them to the user
 ini_set('log_errors', 1);
+
+// Specify the file where PHP errors should be logged (Azure App Service log directory)
 ini_set('error_log', '/home/LogFiles/php_errors.log');
+
 
 // Shutdown handler for fatal errors (like memory exhaustion)
 register_shutdown_function(function() {
@@ -34,22 +42,6 @@ try {
 
     // Load JPEGs into an array (in memory)
     for ($x = 0; $x < $maxImages; $x++) {
-        if ($maxImages >= 3) {
-            // Simulate HTTP 500 Internal Server Error
-            http_response_code(500);
-
-            // Write a log entry
-            error_log("Simulated HTTP 500 Internal Server Error triggered intentionally.");
-
-            // Return structured JSON error response
-            header('Content-Type: application/json');
-            echo json_encode([
-                'error' => 'Simulated Error',
-                'message' => 'An internal server error occurred (simulated).'
-            ]);
-            exit();
-        }
-
         // Defensive check for image name existence
         if (isset($imgNames[$x]) && !empty($imgNames[$x])) {
             $imgPath = "./images/" . $imgNames[$x];
