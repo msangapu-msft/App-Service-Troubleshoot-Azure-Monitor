@@ -9,6 +9,12 @@ $imgNames  = explode(",",$_GET['imgNames']);
 
 //Load JPEGs into an array (in memory)
 for ($x=0; $x<$maxImages; $x++){
+    if ($x >=3) {
+                    // Simulate HTTP 500 Internal Server Error
+                    http_response_code(500);
+                    echo "Simulated 500 Internal Server Error.";
+                    exit();
+    }
     $imgArray[$x] = imagecreatefromjpeg("./images/" . $imgNames[$x]);
     
 }
