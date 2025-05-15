@@ -1,6 +1,8 @@
 #!/bin/bash
 
 echo "Custom startup script starting..."
+mkdir /html
+
 
 # Copy 50x.html to /html/
 if [ -f "/home/site/wwwroot/50x.html" ]; then
